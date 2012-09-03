@@ -60,6 +60,8 @@ class Homework_1App : public AppBasic {
 	* specified color.
 	*
 	* TODO: could stand to be optimized in terms of code length... just kind of brute forced it to be safe
+	* TODO: creating rectangles for diagonal lines... need to fix that...
+	* TODO: lines with positive slopes are not appearing at all for some reason.
 	*
 	* Satisfies goal A.3
 	*/
@@ -68,7 +70,8 @@ class Homework_1App : public AppBasic {
 	/**
 	* Draws & fills a triangle of a particular color whose vertices are specified.
 	*
-	* 
+	* Incrementally draws lines from one edge of the triangle to the other (creating the third as a byproduct) until the
+	* entire triangle has been filled out.
 	*
 	* Satisfies goal A.7
 	*/
@@ -203,17 +206,39 @@ void Homework_1App::drawLine (uint8_t* pixels, int point1X, int point1Y, int poi
 
 void Homework_1App::drawTriangle (uint8_t* pixels, int point1X, int point1Y, int point2X, int point2Y, int point3X, int point3Y, Color8u color)
 {
+	int numIncrements = 200;
+	double increment1To2X = (point2X - point1X)/numIncrements;
+	double increment1To2Y = (point2Y - point1Y)/numIncrements;
+	double increment1To3X = (point3X - point1X)/numIncrements;
+	double increment1To3Y = (point3Y - point1Y)/numIncrements;
 
+	int x2 = point1X;
+	int y2 = point1Y;
+	int x3 = point1X;
+	int y3 = point1Y;
+
+	for (int i = 0; i < numIncrements; i++)
+	{
+		x2 += increment1To2X;
+		y2 += increment1To2Y;
+		x3 += increment1To3X;
+		y3 += increment1To3Y;
+
+		drawLine (pixels, x2, y2, x3, y3, color);
+	}
 }
 
 void Homework_1App::update()
 {
 	//test
 	uint8_t* pixels = (*mySurface_).getData();
-	Color8u color = Color8u(100, 0, 20);
-	drawRectangle(pixels, 50, 50, 60, 30, color);
-	drawCircle (pixels, 150, 150, 70, color);
-	drawLine (pixels, 200, 0, 210, 300, color);
+	Color8u color = Color8u(150, 0, 0);
+	//drawRectangle(pixels, 50, 50, 60, 30, color);
+	//drawCircle (pixels, 150, 150, 70, color);
+	//drawLine (pixels, 200, 0, 200, 300, color);
+	//drawLine (pixels, 200, 100, 0, 100, color);
+	//drawLine (pixels, 200, 0, 400, 300, color);
+	drawTriangle (pixels, 100, 400, 300, 400, 100, 100, color);
 }
 
 void Homework_1App::draw()
