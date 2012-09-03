@@ -4,7 +4,7 @@
 *	Written for CSE 274 on Sept 3, 2012.
 *	
 *	@Note: some misc lines of code are taken from: https://github.com/brinkmwj/HW01
-*	@Note: the midpoint algorithm used for the drawCircle method is modified from the one found here:
+*	@Note: the circle midpoint algorithm used for the drawCircle method is modified from the one found here:
 *		   http://en.wikipedia.org/wiki/Midpoint_circle_algorithm
 *
 *	@Note: program satisfies the following project requirements:
@@ -14,6 +14,7 @@
 
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
+#include "cinder/gl/Texture.h"
 #include "Resources.h"
 #include <algorithm>
 
@@ -33,7 +34,7 @@ class Homework_1App : public AppBasic {
 	Surface* mySurface_;
 
 	/**
-	* Draws a rectangle of the specified color.
+	* Draws & fills a rectangle with the specified color.
 	*
 	* Changes the color value of the pixels representing the rectangle with it's top left corner at
 	* (topLeftX, topLeftY) as well as a width and height.
@@ -43,7 +44,10 @@ class Homework_1App : public AppBasic {
 	void drawRectangle (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
 
 	/**
+	* Draws & fills a circle with the specified color.
 	*
+	* Creates a circle with a specified radius and color at position (centerX, centerY).
+	* Utilizes a version of the midpoint circle algorithm.
 	*
 	* Satisfies goal A.2
 	*/
@@ -62,6 +66,8 @@ class Homework_1App : public AppBasic {
 	void drawLine (uint8_t* pixels, int point1X, int point1Y, int point2X, int point2Y, Color8u color);
 
 	/**
+	* Draws & fills a triangle of a particular color whose vertices are specified.
+	*
 	* 
 	*
 	* Satisfies goal A.7
@@ -197,15 +203,22 @@ void Homework_1App::drawLine (uint8_t* pixels, int point1X, int point1Y, int poi
 
 void Homework_1App::drawTriangle (uint8_t* pixels, int point1X, int point1Y, int point2X, int point2Y, int point3X, int point3Y, Color8u color)
 {
+
 }
 
 void Homework_1App::update()
 {
-
+	//test
+	uint8_t* pixels = (*mySurface_).getData();
+	Color8u color = Color8u(100, 0, 20);
+	drawRectangle(pixels, 50, 50, 60, 30, color);
+	drawCircle (pixels, 150, 150, 70, color);
+	drawLine (pixels, 200, 0, 210, 300, color);
 }
 
 void Homework_1App::draw()
 { 
+	gl::draw(*mySurface_);
 }
 
 CINDER_APP_BASIC( Homework_1App, RendererGl )
