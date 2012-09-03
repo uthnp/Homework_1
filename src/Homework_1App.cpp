@@ -13,6 +13,7 @@
 #include "cinder/app/AppBasic.h"
 #include "cinder/gl/gl.h"
 #include "Resources.h"
+#include <algorithm>
 
 using namespace ci;
 using namespace ci::app;
@@ -39,9 +40,28 @@ class Homework_1App : public AppBasic {
 	*/
 	void drawRectangle (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
 
-
+	/**
+	*
+	*
+	* Satisfies goal A.2
+	*/
 	void drawCircle (uint8_t* pixels, int topLeftX, int topLeftY, int radius, Color8u color);
+
+	/**
+	* Draws a line of the specified color.
+	*
+	* Changes the color of the pixels representing the line from (point1X, point1Y) and (point2X, point2Y) to the
+	* specified color.
+	*
+	* Satisfies goal A.3
+	*/
 	void drawLine (uint8_t* pixels, int point1X, int point1Y, int point2X, int point2Y, Color8u color);
+
+	/**
+	* 
+	*
+	* Satisfies goal A.7
+	*/
 	void drawTriangle (uint8_t* pixels, int point1X, int point1Y, int point2X, int point2Y, int point3X, int point3Y, Color8u color);
 
 	//Width and height of the screen
@@ -89,17 +109,59 @@ void Homework_1App::drawCircle (uint8_t* pixels, int topLeftX, int topLeftY, int
 void Homework_1App::drawLine (uint8_t* pixels, int point1X, int point1Y, int point2X, int point2Y, Color8u color)
 {
 	//based on y = mx+b
-	int slope = ((point1Y - point2Y)/(point1X - point2X));
-	int intersect = (point1Y - (slope*point1X));
-	int xVariable;
-	int yVariable;
+	int slope;
+	int intersect;
+	int x;
+	int y;
 
-	if (point1X == point2X)
+	if (point1X == point2X) //to prevent any div by 0 errors
 	{
-
+		x = point1X;
+		for (y = min(point1Y, point2Y); y < max(point1Y, point2Y); y++)
+		{
+			pixels[3*(x + y*kTextureSize)] = color.r;
+			pixels[3*(x + y*kTextureSize)+1] = color.g;
+			pixels[3*(x + y*kTextureSize)+2] = color.b;
+		}
 		return;
 	}
 	
+	slope = ((point1Y - point2Y)/(point1X - point2X));
+	intersect = (point1Y - (slope*point1X));
+	if (slope > 0)
+	{
+		for (y = point1Y; y < point2Y; y++)
+		{
+			for (x = point1X; x < point2X; x++)
+			{
+				pixels[3*(x + y*kTextureSize)] = color.r;
+				pixels[3*(x + y*kTextureSize)+1] = color.g;
+				pixels[3*(x + y*kTextureSize)+2] = color.b;
+			}
+		}
+	}
+	else if (slope < 0)
+	{
+		for (y = point2Y; y < point1Y; y++)
+		{
+			for (x = point2X; x < point1X; x++)
+			{
+				pixels[3*(x + y*kTextureSize)] = color.r;
+				pixels[3*(x + y*kTextureSize)+1] = color.g;
+				pixels[3*(x + y*kTextureSize)+2] = color.b;
+			}
+		}
+	}
+	else // if slope == 0
+	{
+		for (x = min(point1X, point2X); x < max(point1X, point2X); x++)
+		{
+			y = point1Y;
+			pixels[3*(x + y*kTextureSize)] = color.r;
+			pixels[3*(x + y*kTextureSize)+1] = color.g;
+			pixels[3*(x + y*kTextureSize)+2] = color.b;
+		}
+	}
 }
 
 void Homework_1App::drawTriangle (uint8_t* pixels, int point1X, int point1Y, int point2X, int point2Y, int point3X, int point3Y, Color8u color)
