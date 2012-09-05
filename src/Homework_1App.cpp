@@ -77,6 +77,16 @@ class Homework_1App : public AppBasic {
 	*/
 	void drawTriangle (uint8_t* pixels, int point1X, int point1Y, int point2X, int point2Y, int point3X, int point3Y, Color8u color);
 
+	/**
+	* Applys a blur effect on the pixels within the rectangle specified.
+	*
+	* Sets the value of a pixel within the specified bounds equal to the average of it and the 8 pixels
+	* immediately surrounding it.
+	*
+	* Satisfies goal B.1
+	*/
+	void applyBlur (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
+
 	//Width and height of the screen
 	static const int kAppWidth=800;
 	static const int kAppHeight=600;
@@ -219,6 +229,55 @@ void Homework_1App::drawTriangle (uint8_t* pixels, int point1X, int point1Y, int
 	}
 }
 
+void Homework_1App::applyBlur(uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
+{
+	int x;
+	int y;
+	int newValue_r;
+	int newValue_g;
+	int newValue_b;
+
+	// create a copy-to (dummy) array with the same length as pixels
+	int pixelArrayLength = 3*(kAppHeight + kAppWidth*kTextureSize);
+	uint8_t* dummyArray = new uint8_t[pixelArrayLength];
+
+	// loop through original surface to get average values
+	// edges of the rectangle are skipped for safety of the program
+	for (y = (topLeftY + 1); y < (topLeftY + height); y++)
+	{
+		for (x = (topLeftX + 1); x < (topLeftX + width); x++)
+		{
+			newValue_r = 0;
+			newValue_g = 0;
+			newValue_b = 0;
+
+			for (int i = (x-1); i <= (x+1); i++) // i refers to x coord of specific pixel
+			{
+				for (int j = (y-1); j <= (y+1); j++) // j refers to y coord of specific pixel
+				{
+					newValue_r += pixels[3*(i + j*kTextureSize)];
+					newValue_g += pixels[3*(i + j*kTextureSize)+1];
+					newValue_b += pixels[3*(i + j*kTextureSize)+2];
+				}
+			}
+
+			// put the new pixel values into the dummy array
+			dummyArray[3*(x + y*kTextureSize)] = newValue_r/9;
+			dummyArray[3*(x + y*kTextureSize)+1] = newValue_g/9;
+			dummyArray[3*(x + y*kTextureSize)+2] = newValue_b/9;
+		}
+	}
+
+	// loop through the two arrays and apply the changed values to the real array
+	for (y = (topLeftY + 1); y < (topLeftY + height); y++)
+	{
+		for (x = (topLeftX + 1); x < (topLeftX + width); x++)
+		{
+			pixels[3*(x + y*kTextureSize)] = dummyArray[3*(x + y*kTextureSize)];
+		}
+	}
+}
+
 void Homework_1App::update()
 {
 	//test
@@ -240,13 +299,14 @@ void Homework_1App::update()
 	Color8u color2 = Color8u(0, 150, 0);
 	Color8u color3 = Color8u(0, 0, 150);
 	Color8u color4 = Color8u(100, 100, 0);
-	//drawRectangle(pixels, 50, 50, 60, 30, color);
-	//drawCircle (pixels, 150, 150, 70, color);
+	drawRectangle(pixels, 50, 50, 60, 30, color1);
+	drawCircle (pixels, 150, 150, 70, color1);
 	drawLine (pixels, 100, 300, 300, 300, color1); // m = 0
 	drawLine (pixels, 200, 200, 200, 400, color2); // m = oo
 	drawLine (pixels, 200, 200, 600, 500, color3); // m = +
 	drawLine (pixels, 350, 350, 500, 100, color4); // m = -
-	//drawTriangle (pixels, 100, 400, 300, 400, 100, 100, color);
+	drawTriangle (pixels, 100, 400, 300, 400, 100, 100, color1);
+	applyBlur (pixels, 0, 0, kAppHeight, kAppWidth);
 }
 
 void Homework_1App::draw()
