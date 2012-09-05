@@ -91,6 +91,20 @@ class Homework_1App : public AppBasic {
 	static const int kAppWidth=800;
 	static const int kAppHeight=600;
 	static const int kTextureSize=1024; // must be power of 2
+
+	// important constants & variables for the actual drawing
+	Color8u backColor;
+	Color8u white;
+	Color8u black;
+	Color8u red;
+	Color8u yellow;
+	static const int headerHeight = 100;
+	static const int cardHeight = 300;
+	static const int bufferHeight = 33; // vertical spacing
+	static const int footerHeight = 100;
+	static const int cardWidth = 170;
+	static const int bufferWidth = 15; // space between cards
+
 };
 
 void Homework_1App::prepareSettings(Settings* settings){
@@ -280,13 +294,17 @@ void Homework_1App::applyBlur(uint8_t* pixels, int topLeftX, int topLeftY, int w
 
 void Homework_1App::update()
 {
-	//test
 	uint8_t* pixels = (*mySurface_).getData();
-	//Color8u backColor = Color8u (10, 200, 10);
-	Color8u backColor = Color8u (0, 0, 0);
 	
 	int numPixels = max(kAppWidth, kAppHeight);
 	numPixels *= numPixels;
+
+	// set up important color objects
+	backColor = Color8u (10, 200, 10);
+	white = Color8u (255, 255, 255);
+	black = Color8u (0, 0, 0);
+	red = Color8u (255, 0, 0);
+	yellow = Color8u (255, 255, 0);
 
 	for (int i = 0; i < (3*numPixels); i += 3)
 	{
@@ -295,17 +313,13 @@ void Homework_1App::update()
 		pixels[i+2] = backColor.b;
 	}
 
-	Color8u color1 = Color8u(150, 0, 0);
-	Color8u color2 = Color8u(0, 150, 0);
-	Color8u color3 = Color8u(0, 0, 150);
-	Color8u color4 = Color8u(100, 100, 0);
-	drawRectangle(pixels, 50, 50, 60, 30, color1);
-	drawCircle (pixels, 150, 150, 70, color1);
-	drawLine (pixels, 100, 300, 300, 300, color1); // m = 0
-	drawLine (pixels, 200, 200, 200, 400, color2); // m = oo
-	drawLine (pixels, 200, 200, 600, 500, color3); // m = +
-	drawLine (pixels, 350, 350, 500, 100, color4); // m = -
-	drawTriangle (pixels, 100, 400, 300, 400, 100, 100, color1);
+	// draw the cards
+	for (int i = 0; i < 4; i++)
+	{
+		drawRectangle(pixels, (((2 * i + 1) * bufferWidth) + (i * cardWidth)), (headerHeight + bufferHeight), cardWidth, cardHeight, white);
+	}
+
+
 	applyBlur (pixels, 0, 0, kAppHeight, kAppWidth);
 }
 
