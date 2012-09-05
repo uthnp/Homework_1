@@ -87,14 +87,13 @@ class Homework_1App : public AppBasic {
 	*/
 	void applyBlur (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
 
-	void drawSpade (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
-	void drawClub (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
-	void drawHeart (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
-	void drawDiamond (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
-	void draw1 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
-	void draw4 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
-	void draw7 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
-	void draw10 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
+	void drawSpade (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
+	void drawClub (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
+	void drawHeart (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
+	void drawDiamond (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
+	void draw4 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
+	void draw7 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
+	void draw10 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
 
 	//Width and height of the screen
 	static const int kAppWidth=800;
@@ -304,28 +303,39 @@ void Homework_1App::applyBlur(uint8_t* pixels, int topLeftX, int topLeftY, int w
 	}
 }
 
-void Homework_1App::drawSpade (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
+void Homework_1App::drawSpade (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color)
+{
+	drawTriangle(pixels, topLeftX + (width/2), topLeftY, topLeftX, topLeftY + (height/2), topLeftX + width, topLeftY + (height/2), color);
+	drawCircle (pixels, topLeftX + (width/4), topLeftY + (int)((4.5/8.0)*height), (width/3), color);
+	drawCircle (pixels, topLeftX + 3*(width/4), topLeftY + (int)((4.5/8.0)*height), (width/3), color);
+	drawTriangle(pixels, topLeftX + (width/2), topLeftY + (height/2), topLeftX+5, topLeftY + (height), topLeftX + width - 5, topLeftY + (height), color);
+}
+void Homework_1App::drawClub (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color)
+{
+	drawCircle(pixels, (topLeftX + (width/2)), topLeftY+(height/4), (width/3), color);
+	drawCircle(pixels, (topLeftX + (width/6)), (topLeftY + height/2), (width/3), color);
+	drawCircle(pixels, (topLeftX + 5*(width/6)), (topLeftY + height/2), (width/3), color);
+	drawRectangle(pixels, (topLeftX + (width/3)), (topLeftY + height/3), (width/3), (height/3), color);
+	drawTriangle(pixels, (topLeftX + (width/2)), (topLeftY + height/2), (topLeftX +5), (topLeftY + height), (topLeftX + width - 5), (topLeftY + height), color);
+}
+void Homework_1App::drawHeart (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color)
+{
+	drawCircle(pixels, (topLeftX + width/3), (topLeftY + width/3), (width/3), color);
+	drawCircle(pixels, (topLeftX + 2*(width/3)), (topLeftY + width/3), (width/3), color);
+	drawTriangle(pixels, (topLeftX), (topLeftY + height/3), (topLeftX + width), (topLeftY + height/3), (topLeftX + width/2), (topLeftY + height), color);
+}
+void Homework_1App::drawDiamond (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color)
+{
+	drawTriangle(pixels, );
+	drawTriangle(pixels, );
+}
+void Homework_1App::draw4 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color)
 {
 }
-void Homework_1App::drawClub (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
+void Homework_1App::draw7 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color)
 {
 }
-void Homework_1App::drawHeart (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
-{
-}
-void Homework_1App::drawDiamond (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
-{
-}
-void Homework_1App::draw1 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
-{
-}
-void Homework_1App::draw4 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
-{
-}
-void Homework_1App::draw7 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
-{
-}
-void Homework_1App::draw10 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
+void Homework_1App::draw10 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color)
 {
 }
 
@@ -357,6 +367,19 @@ void Homework_1App::update()
 		drawRectangle(pixels, (((2 * i + 1) * bufferWidth) + (i * cardWidth)), (headerHeight + bufferHeight), cardWidth, cardHeight, white);
 		drawTriangle(pixels, ((2 * i + 1) * (bufferWidth + (cardWidth/2))), (headerHeight + bufferHeight + cardHeight + 1), ((2 * i + 1) * (bufferWidth + (cardWidth/2)) - halfTriangleWidth), (headerHeight + bufferHeight + cardHeight + 1 + triangleHeight), ((2 * i + 1) * (bufferWidth + (cardWidth/2)) + halfTriangleWidth), (headerHeight + bufferHeight + cardHeight + 1 + triangleHeight), black); 
 	}
+
+	// draw the images on the cards
+	drawSpade(pixels, (2*bufferWidth), (headerHeight + bufferHeight + 10), 25, 50, black);
+	drawSpade(pixels, (cardWidth - 2*bufferWidth), (cardHeight + 2*bufferHeight), 25, 50, black);
+	drawLine (pixels, (2*bufferWidth), (cardHeight + 2*bufferHeight), (2*bufferWidth), (cardHeight + 2*bufferHeight) + 50, black);
+	drawLine (pixels, (cardWidth - 2*bufferWidth) +10, (headerHeight + bufferHeight + 10), (cardWidth - 2*bufferWidth) +10, (headerHeight + bufferHeight + 10) + 50, black);
+	drawSpade(pixels, (5*bufferWidth), (headerHeight + 4*bufferHeight), 50, 100, black);
+
+	drawClub(pixels, (4*bufferWidth + cardWidth), (headerHeight + bufferHeight + 10), 25, 50, black);
+	drawClub(pixels, (2*cardWidth + bufferWidth), (cardHeight + 2*bufferHeight), 25, 50, black);
+
+	//drawHeart(pixels, (4*bufferWidth + 2*cardWidth), (headerHeight + bufferHeight + 10), 25, 50, red);
+	//drawHeart(pixels, (4*cardWidth + 3*bufferWidth), (cardHeight + 2*bufferHeight), 25, 50, red);
 
 	// draw the header
 	drawTriangle(pixels, 0, 0, 0, 100, 200, 0, yellow);
