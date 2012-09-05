@@ -73,6 +73,9 @@ class Homework_1App : public AppBasic {
 	* Incrementally draws lines from one edge of the triangle to the other (creating the third as a byproduct) until the
 	* entire triangle has been filled out.
 	*
+	* @Note: causes an improper access of data that causes the program to crash IF the triangle it tries to create
+	* points downwards. It seems to have no problem with some triangles, but others give it trouble.
+	*
 	* Satisfies goal A.7
 	*/
 	void drawTriangle (uint8_t* pixels, int point1X, int point1Y, int point2X, int point2Y, int point3X, int point3Y, Color8u color);
@@ -87,13 +90,26 @@ class Homework_1App : public AppBasic {
 	*/
 	void applyBlur (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
 
+	/**
+	* Draws the shape of a spade (a la playing cards) using the circle and triangle methods.
+	*/
 	void drawSpade (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
+	/**
+	* Draws the shape of a club (a la playing cards) using the circle, square and triangle methods.
+	*/
 	void drawClub (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
+	/**
+	* Draws the shape of a heart (a la playing cards) using the circle and triangle methods.
+	*
+	* @Note: due to an error in the triangle method... this cannot be called without crashing the program.
+	*/
 	void drawHeart (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
+	/**
+	* Draws the shape of a diamond (a la playing cards) using the triangle methods.
+	*
+	* @Note: due to an error in the triangle method... this cannot be called without crashing the program.
+	*/
 	void drawDiamond (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
-	void draw4 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
-	void draw7 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
-	void draw10 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color);
 
 	//Width and height of the screen
 	static const int kAppWidth=800;
@@ -326,17 +342,8 @@ void Homework_1App::drawHeart (uint8_t* pixels, int topLeftX, int topLeftY, int 
 }
 void Homework_1App::drawDiamond (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color)
 {
-	drawTriangle(pixels, );
-	drawTriangle(pixels, );
-}
-void Homework_1App::draw4 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color)
-{
-}
-void Homework_1App::draw7 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color)
-{
-}
-void Homework_1App::draw10 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height, Color8u color)
-{
+	drawTriangle(pixels, (topLeftX + (width/2)),  topLeftY, topLeftX, (topLeftY + height/2), (topLeftX + width), (topLeftY + height/2), color);
+	drawTriangle(pixels, (topLeftX), topLeftY+(height/2), (topLeftX + width), (topLeftY + height/2), (topLeftX + width/2), (topLeftY + height), color);
 }
 
 void Homework_1App::update()
@@ -380,6 +387,8 @@ void Homework_1App::update()
 
 	//drawHeart(pixels, (4*bufferWidth + 2*cardWidth), (headerHeight + bufferHeight + 10), 25, 50, red);
 	//drawHeart(pixels, (4*cardWidth + 3*bufferWidth), (cardHeight + 2*bufferHeight), 25, 50, red);
+
+	//drawDiamond(pixels, (4*bufferWidth + 2*cardWidth), (headerHeight + bufferHeight + 10), 25, 50, red);
 
 	// draw the header
 	drawTriangle(pixels, 0, 0, 0, 100, 200, 0, yellow);
