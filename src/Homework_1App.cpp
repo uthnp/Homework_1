@@ -3,13 +3,17 @@
 *	Program written to produce an image of some cards using basic shapes.
 *	Written for CSE 274 on Sept 3, 2012.
 *	
-*	@Note: some misc lines of code are taken from: https://github.com/brinkmwj/HW01
+*	@Note: some lines of code are taken from: https://github.com/brinkmwj/HW01
 *	@Note: the circle midpoint algorithm used for the drawCircle method is modified from the one found here:
 *		   http://en.wikipedia.org/wiki/Midpoint_circle_algorithm
 *
 *	@Note: program satisfies the following project requirements:
 *		A.1, A.2, A.3, A.7
 *		B.1
+*
+*	@Note: This program eats through the memory designated to it FAST!! I attribute it to my inexperienced messing around with
+*		   direct access of data from memory... regardless... it sometimes has a short lifespan before crashing.
+*		   Though... it seems to be a bit random...
 */
 
 #include "cinder/app/AppBasic.h"
@@ -378,17 +382,26 @@ void Homework_1App::update()
 	// draw the images on the cards
 	drawSpade(pixels, (2*bufferWidth), (headerHeight + bufferHeight + 10), 25, 50, black);
 	drawSpade(pixels, (cardWidth - 2*bufferWidth), (cardHeight + 2*bufferHeight), 25, 50, black);
-	drawLine (pixels, (2*bufferWidth), (cardHeight + 2*bufferHeight), (2*bufferWidth), (cardHeight + 2*bufferHeight) + 50, black);
-	drawLine (pixels, (cardWidth - 2*bufferWidth) +10, (headerHeight + bufferHeight + 10), (cardWidth - 2*bufferWidth) +10, (headerHeight + bufferHeight + 10) + 50, black);
+	//drawLine (pixels, (2*bufferWidth), (cardHeight + 2*bufferHeight), (2*bufferWidth), (cardHeight + 2*bufferHeight) + 50, black);
+	//drawLine (pixels, (cardWidth - 2*bufferWidth) +10, (headerHeight + bufferHeight + 10), (cardWidth - 2*bufferWidth) +10, (headerHeight + bufferHeight + 10) + 50, black);
 	drawSpade(pixels, (5*bufferWidth), (headerHeight + 4*bufferHeight), 50, 100, black);
 
 	drawClub(pixels, (4*bufferWidth + cardWidth), (headerHeight + bufferHeight + 10), 25, 50, black);
 	drawClub(pixels, (2*cardWidth + bufferWidth), (cardHeight + 2*bufferHeight), 25, 50, black);
+	drawClub(pixels, (-4*bufferWidth + 2*cardWidth), (headerHeight + 4*bufferHeight), 50, 100, black);
 
 	//drawHeart(pixels, (4*bufferWidth + 2*cardWidth), (headerHeight + bufferHeight + 10), 25, 50, red);
 	//drawHeart(pixels, (4*cardWidth + 3*bufferWidth), (cardHeight + 2*bufferHeight), 25, 50, red);
 
 	//drawDiamond(pixels, (4*bufferWidth + 2*cardWidth), (headerHeight + bufferHeight + 10), 25, 50, red);
+
+	drawClub(pixels, (6*bufferWidth + 2*cardWidth), (headerHeight + bufferHeight + 10), 25, 50, red);
+	drawClub(pixels, (2*cardWidth + 14*bufferWidth), (cardHeight + 2*bufferHeight), 25, 50, red);
+	drawClub(pixels, (9*bufferWidth + 2*cardWidth), (headerHeight + 4*bufferHeight), 50, 100, red);
+
+	drawSpade(pixels, (8*bufferWidth + 3*cardWidth), (headerHeight + bufferHeight + 10), 25, 50, red);
+	drawSpade(pixels, (3*cardWidth + 16*bufferWidth), (cardHeight + 2*bufferHeight), 25, 50, red);
+	drawSpade(pixels, (11*bufferWidth + 3*cardWidth), (headerHeight + 4*bufferHeight), 50, 100, red);
 
 	// draw the header
 	drawTriangle(pixels, 0, 0, 0, 100, 200, 0, yellow);
