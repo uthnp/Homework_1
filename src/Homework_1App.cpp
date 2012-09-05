@@ -87,6 +87,15 @@ class Homework_1App : public AppBasic {
 	*/
 	void applyBlur (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
 
+	void drawSpade ();
+	void drawClub ();
+	void drawHeart ();
+	void drawDiamond ();
+	void draw1 ();
+	void draw4 ();
+	void draw7 ();
+	void draw10 ();
+
 	//Width and height of the screen
 	static const int kAppWidth=800;
 	static const int kAppHeight=600;
@@ -98,12 +107,15 @@ class Homework_1App : public AppBasic {
 	Color8u black;
 	Color8u red;
 	Color8u yellow;
+	Color8u blue;
 	static const int headerHeight = 100;
 	static const int cardHeight = 300;
 	static const int bufferHeight = 33; // vertical spacing
 	static const int footerHeight = 100;
 	static const int cardWidth = 170;
 	static const int bufferWidth = 15; // space between cards
+	static const int halfTriangleWidth = 15;
+	static const int triangleHeight = 29;
 
 };
 
@@ -305,6 +317,7 @@ void Homework_1App::update()
 	black = Color8u (0, 0, 0);
 	red = Color8u (255, 0, 0);
 	yellow = Color8u (255, 255, 0);
+	blue = Color8u (0, 0, 255);
 
 	for (int i = 0; i < (3*numPixels); i += 3)
 	{
@@ -313,12 +326,31 @@ void Homework_1App::update()
 		pixels[i+2] = backColor.b;
 	}
 
-	// draw the cards
+	// draw the cards and the "selection" triangles below
 	for (int i = 0; i < 4; i++)
 	{
 		drawRectangle(pixels, (((2 * i + 1) * bufferWidth) + (i * cardWidth)), (headerHeight + bufferHeight), cardWidth, cardHeight, white);
+		//drawTriangle(pixels, ((2 * i + 1) * (bufferWidth + (cardWidth/2))), (headerHeight + bufferHeight + cardHeight + 1), ((2 * i + 1) * (bufferWidth + (cardWidth/2)) - halfTriangleWidth), (headerHeight + bufferHeight + cardHeight + 1 + triangleHeight), ((2 * i + 1) * (bufferWidth + (cardWidth/2)) + halfTriangleWidth), (headerHeight + bufferHeight + cardHeight + 1 + triangleHeight), black); 
 	}
 
+	// draw the header
+	drawTriangle(pixels, 0, 0, 0, 100, 200, 0, yellow);
+	drawTriangle(pixels, 800, 0, 800, 100, 600, 0, yellow);
+	drawLine(pixels, 0, 100, 800,100, black);
+
+	// draw the footer
+	drawLine(pixels, 0, (headerHeight+cardHeight+(2*bufferHeight)), 800, (headerHeight+cardHeight+(2*bufferHeight)), black);
+	for (int i = 0; i < 8; i++)
+	{
+		if( i%2 == 0)
+		{
+			drawCircle(pixels, ((2*i + 1)*(kAppWidth/16)), (headerHeight + (3*bufferHeight) + cardHeight + (kAppWidth/16)), (kAppWidth/16), yellow);
+		}
+		else
+		{
+			drawCircle(pixels, ((2*i + 1)*(kAppWidth/16)), (headerHeight + (3*bufferHeight) + cardHeight + (kAppWidth/16)), (kAppWidth/16), blue);
+		}
+	}
 
 	applyBlur (pixels, 0, 0, kAppHeight, kAppWidth);
 }
