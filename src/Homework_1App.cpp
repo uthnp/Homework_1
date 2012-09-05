@@ -87,14 +87,14 @@ class Homework_1App : public AppBasic {
 	*/
 	void applyBlur (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
 
-	void drawSpade ();
-	void drawClub ();
-	void drawHeart ();
-	void drawDiamond ();
-	void draw1 ();
-	void draw4 ();
-	void draw7 ();
-	void draw10 ();
+	void drawSpade (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
+	void drawClub (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
+	void drawHeart (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
+	void drawDiamond (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
+	void draw1 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
+	void draw4 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
+	void draw7 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
+	void draw10 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height);
 
 	//Width and height of the screen
 	static const int kAppWidth=800;
@@ -233,16 +233,16 @@ void Homework_1App::drawLine (uint8_t* pixels, int point1X, int point1Y, int poi
 
 void Homework_1App::drawTriangle (uint8_t* pixels, int point1X, int point1Y, int point2X, int point2Y, int point3X, int point3Y, Color8u color)
 {
-	int numIncrements = 200;
-	double increment1To2X = (point2X - point1X)/numIncrements;
-	double increment1To2Y = (point2Y - point1Y)/numIncrements;
-	double increment1To3X = (point3X - point1X)/numIncrements;
-	double increment1To3Y = (point3Y - point1Y)/numIncrements;
+	double numIncrements = 200.0;
+	double increment1To2X = (double)(point2X - point1X)/numIncrements;
+	double increment1To2Y = (double)(point2Y - point1Y)/numIncrements;
+	double increment1To3X = (double)(point3X - point1X)/numIncrements;
+	double increment1To3Y = (double)(point3Y - point1Y)/numIncrements;
 
-	int x2 = point1X;
-	int y2 = point1Y;
-	int x3 = point1X;
-	int y3 = point1Y;
+	double x2 = point1X;
+	double y2 = point1Y;
+	double x3 = point1X;
+	double y3 = point1Y;
 
 	for (int i = 0; i < numIncrements; i++)
 	{
@@ -251,7 +251,7 @@ void Homework_1App::drawTriangle (uint8_t* pixels, int point1X, int point1Y, int
 		x3 += increment1To3X;
 		y3 += increment1To3Y;
 
-		drawLine (pixels, x2, y2, x3, y3, color);
+		drawLine (pixels, (int)x2, (int)y2, (int)x3, (int)y3, color);
 	}
 }
 
@@ -304,6 +304,31 @@ void Homework_1App::applyBlur(uint8_t* pixels, int topLeftX, int topLeftY, int w
 	}
 }
 
+void Homework_1App::drawSpade (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
+{
+}
+void Homework_1App::drawClub (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
+{
+}
+void Homework_1App::drawHeart (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
+{
+}
+void Homework_1App::drawDiamond (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
+{
+}
+void Homework_1App::draw1 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
+{
+}
+void Homework_1App::draw4 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
+{
+}
+void Homework_1App::draw7 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
+{
+}
+void Homework_1App::draw10 (uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
+{
+}
+
 void Homework_1App::update()
 {
 	uint8_t* pixels = (*mySurface_).getData();
@@ -330,7 +355,7 @@ void Homework_1App::update()
 	for (int i = 0; i < 4; i++)
 	{
 		drawRectangle(pixels, (((2 * i + 1) * bufferWidth) + (i * cardWidth)), (headerHeight + bufferHeight), cardWidth, cardHeight, white);
-		//drawTriangle(pixels, ((2 * i + 1) * (bufferWidth + (cardWidth/2))), (headerHeight + bufferHeight + cardHeight + 1), ((2 * i + 1) * (bufferWidth + (cardWidth/2)) - halfTriangleWidth), (headerHeight + bufferHeight + cardHeight + 1 + triangleHeight), ((2 * i + 1) * (bufferWidth + (cardWidth/2)) + halfTriangleWidth), (headerHeight + bufferHeight + cardHeight + 1 + triangleHeight), black); 
+		drawTriangle(pixels, ((2 * i + 1) * (bufferWidth + (cardWidth/2))), (headerHeight + bufferHeight + cardHeight + 1), ((2 * i + 1) * (bufferWidth + (cardWidth/2)) - halfTriangleWidth), (headerHeight + bufferHeight + cardHeight + 1 + triangleHeight), ((2 * i + 1) * (bufferWidth + (cardWidth/2)) + halfTriangleWidth), (headerHeight + bufferHeight + cardHeight + 1 + triangleHeight), black); 
 	}
 
 	// draw the header
