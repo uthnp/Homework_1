@@ -274,6 +274,9 @@ void Homework_1App::drawTriangle (uint8_t* pixels, int point1X, int point1Y, int
 	}
 }
 
+//I dont think you need the to pass in the topleft corner. This is always 0,0 and you used the same height/width  that is declared at the beginning
+//so you did not need to declare that either. I think it would have been cool for you to use those variables to create a specified area thats blur
+//-Raquel Gonzalez
 void Homework_1App::applyBlur(uint8_t* pixels, int topLeftX, int topLeftY, int width, int height)
 {
 	int x;
@@ -288,9 +291,9 @@ void Homework_1App::applyBlur(uint8_t* pixels, int topLeftX, int topLeftY, int w
 
 	// loop through original surface to get average values
 	// edges of the rectangle are skipped for safety of the program
-	for (y = (topLeftY + 1); y < (topLeftY + height); y++)
+	for (y = (topLeftY+1); y < (topLeftY+height); y++)
 	{
-		for (x = (topLeftX + 1); x < (topLeftX + width); x++)
+		for (x = (topLeftX+1); x < (topLeftX+width); x++)
 		{
 			newValue_r = 0;
 			newValue_g = 0;
@@ -314,11 +317,14 @@ void Homework_1App::applyBlur(uint8_t* pixels, int topLeftX, int topLeftY, int w
 	}
 
 	// loop through the two arrays and apply the changed values to the real array
-	for (y = (topLeftY + 1); y < (topLeftY + height); y++)
+	for (y = (topLeftY+1); y < (topLeftY+height); y++)
 	{
-		for (x = (topLeftX + 1); x < (topLeftX + width); x++)
+		for (x = (topLeftX+1); x < (topLeftX+width); x++)
 		{
+			
 			pixels[3*(x + y*kTextureSize)] = dummyArray[3*(x + y*kTextureSize)];
+			//pixels[3*(x + y*kTextureSize)+1] = dummyArray[3*(x + y*kTextureSize)+1];-Needed to add this one and the one below to make your image blur.-Raquel Gonzalez
+			//pixels[3*(x + y*kTextureSize)+2] = dummyArray[3*(x + y*kTextureSize)+2];
 		}
 	}
 }
@@ -378,7 +384,7 @@ void Homework_1App::update()
 		drawRectangle(pixels, (((2 * i + 1) * bufferWidth) + (i * cardWidth)), (headerHeight + bufferHeight), cardWidth, cardHeight, white);
 		drawTriangle(pixels, ((2 * i + 1) * (bufferWidth + (cardWidth/2))), (headerHeight + bufferHeight + cardHeight + 1), ((2 * i + 1) * (bufferWidth + (cardWidth/2)) - halfTriangleWidth), (headerHeight + bufferHeight + cardHeight + 1 + triangleHeight), ((2 * i + 1) * (bufferWidth + (cardWidth/2)) + halfTriangleWidth), (headerHeight + bufferHeight + cardHeight + 1 + triangleHeight), black); 
 	}
-
+	//There should probably be a seperate Draw Cards methods, to make the update look a little cleaner-Raquel
 	// draw the images on the cards
 	drawSpade(pixels, (2*bufferWidth), (headerHeight + bufferHeight + 10), 25, 50, black);
 	drawSpade(pixels, (cardWidth - 2*bufferWidth), (cardHeight + 2*bufferHeight), 25, 50, black);
